@@ -8,8 +8,6 @@ import (
 	"strconv"
 )
 
-const MeasureNotExecuted = -1000000
-
 func open(filename string) *os.File {
 	data, error := os.Open(filename)
 	if error != nil {
@@ -22,14 +20,19 @@ func open(filename string) *os.File {
 func runTask(input string) int {
 	scanner := bufio.NewScanner(open(input))
 	counter := 0
-	previousValue := MeasureNotExecuted
+	scanner.Scan()
+	previousValue, err := strconv.Atoi(scanner.Text())
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	for scanner.Scan() {
 		intValue, err := strconv.Atoi(scanner.Text())
 		if err != nil {
 			log.Fatal(err)
 		}
-		if intValue > previousValue && previousValue != MeasureNotExecuted {
-			counter += 1
+		if intValue > previousValue {
+			counter++
 		}
 		previousValue = intValue
 	}
