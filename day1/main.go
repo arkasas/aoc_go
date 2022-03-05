@@ -17,7 +17,7 @@ func open(filename string) *os.File {
 	return data
 }
 
-func runTask(input string) int {
+func runTaskA(input string) int {
 	scanner := bufio.NewScanner(open(input))
 	counter := 0
 	scanner.Scan()
@@ -40,7 +40,41 @@ func runTask(input string) int {
 	return counter
 }
 
+func runTaskB(input string) int {
+	scanner := bufio.NewScanner(open(input))
+	counter := 0
+	scanner.Scan()
+	valueA, _ := strconv.Atoi(scanner.Text())
+	scanner.Scan()
+	valueB, _ := strconv.Atoi(scanner.Text())
+	scanner.Scan()
+	valueC, _ := strconv.Atoi(scanner.Text())
+	prevSum := valueA + valueB + valueC
+	for scanner.Scan() {
+		value, _ := strconv.Atoi(scanner.Text())
+		nextSum := valueB + valueC + value
+		if nextSum > prevSum {
+			counter++
+		}
+		prevSum = nextSum
+		valueA = valueB
+		valueB = valueC
+		valueC = value
+	}
+
+	return counter
+}
+
+func taskA() {
+	fmt.Println(runTaskA("test_input") == 7)
+	fmt.Println(runTaskA("input"))
+}
+
+func taskB() {
+	fmt.Println(runTaskB("test_input") == 5)
+	fmt.Println(runTaskB("input"))
+}
+
 func main() {
-	fmt.Println(runTask("test_input") == 7)
-	fmt.Println(runTask("input"))
+	taskB()
 }
